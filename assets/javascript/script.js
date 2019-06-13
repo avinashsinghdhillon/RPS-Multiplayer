@@ -38,7 +38,7 @@ let player2 = {
     ties: 0
 }
 
-// On form load check if player 1 is already loaded
+// On form load check if player 1 or 2 is already loaded
 getDataSnapshot();
 
 function getDataSnapshot(){
@@ -47,6 +47,9 @@ function getDataSnapshot(){
         console.log(snapshot.val());
         playerLoadData = snapshot.val();
         checkIfPlayerLoaded();
+        if(p1Loaded && p2Loaded){
+            startNewGame();
+        }
     }, function(errorObject) {
         console.log("Errors handled: " + errorObject.code);
       });
@@ -74,6 +77,7 @@ $("#enter-name").on("submit", function(event){
         updatePlayerSection("p2", $("#inputPlayerName").val());
         p2Loaded = true;
     }
+    //else if both players are loaded display message to wait for next game????////////////
 });
 
 function updatePlayerSection(playerNum, playerName){
@@ -82,3 +86,7 @@ function updatePlayerSection(playerNum, playerName){
         console.log("Errors handled: " + errorObject.code);
       };
 };
+
+function startNewGame(){
+    console.log("Starting New Game");
+}
