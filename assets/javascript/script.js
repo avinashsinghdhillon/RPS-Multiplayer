@@ -14,3 +14,71 @@
 
 
 var dataRef = firebase.database();
+
+
+////////////////////////////////
+///// Global variables
+//////////////////////////////
+let playerLoadData;
+let p1Loaded = false;
+let p2Loaded = false;
+
+
+let player1 = {
+    name: "",
+    currentSelection: "",
+    wins: 0,
+    ties: 0
+};
+
+let player2 = {
+    name: "",
+    currentSelection: "",
+    wins: 0,
+    ties: 0
+}
+
+// On form load check if player 1 is already loaded
+getDataSnapshot();
+
+function getDataSnapshot(){
+    dataRef.ref("Players").on("value",function (snapshot){
+        //debugger;
+        console.log(snapshot.val());
+        playerLoadData = snapshot.val();
+        checkIfPlayerLoaded();
+    }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+      });
+};
+
+function checkIfPlayerLoaded() {
+    if(playerLoadData.p1 != ""){
+        p1Loaded = true;
+    }
+    if (playerLoadData.p2 != ""){
+        p2Loaded = true;
+    }
+}
+
+
+$("#enter-name").on("submit", function(event){
+    event.preventDefault();
+    console.log($("#inputPlayerName").val());
+    if(!p1Loaded){
+        player1.name = $("#inputPlayerName").val();
+        updatePlayerSection("p1", $("#inputPlayerName").val());
+        p1Loaded = true;
+    }else if (p1Loaded && !p2Loaded){
+        player2.name = $("#inputPlayerName").val();
+        updatePlayerSection("p2", $("#inputPlayerName").val());
+        p2Loaded = true;
+    }
+});
+
+function updatePlayerSection(playerNum, playerName){
+    debugger;
+    dataRef.ref("Players/" + playerNum).set(playerName),function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+      };
+};
