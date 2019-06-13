@@ -24,19 +24,14 @@ let p1Loaded = false;
 let p2Loaded = false;
 
 
-let player1 = {
+let player = {
     name: "",
+    playerNum: "0",
     currentSelection: "",
     wins: 0,
     ties: 0
 };
 
-let player2 = {
-    name: "",
-    currentSelection: "",
-    wins: 0,
-    ties: 0
-}
 
 // On form load check if player 1 or 2 is already loaded
 getDataSnapshot();
@@ -69,15 +64,18 @@ $("#enter-name").on("submit", function(event){
     event.preventDefault();
     console.log($("#inputPlayerName").val());
     if(!p1Loaded){
-        player1.name = $("#inputPlayerName").val();
+        player.name = $("#inputPlayerName").val();
+        playerNum = "1";
         updatePlayerSection("p1", $("#inputPlayerName").val());
         p1Loaded = true;
     }else if (p1Loaded && !p2Loaded){
-        player2.name = $("#inputPlayerName").val();
+        player.name = $("#inputPlayerName").val();
+        playerNum = "2";
         updatePlayerSection("p2", $("#inputPlayerName").val());
         p2Loaded = true;
     }
-    //else if both players are loaded display message to wait for next game????////////////
+    //??????????????????????????????????????????????????????????????????????
+    //else if both players are loaded display message to wait for next game???????????????
 });
 
 function updatePlayerSection(playerNum, playerName){
@@ -89,4 +87,21 @@ function updatePlayerSection(playerNum, playerName){
 
 function startNewGame(){
     console.log("Starting New Game");
+    //enable the game buttons panel based on player number
+    if(playerNum === "1"){
+        enableButtons("1");
+    }else{
+        enableButtons("2");
+    }
+
+    //start the timer////////////////////////////
+    // if player does not click in 15 seconds, do a random pick for player
+}
+
+function enableButtons(num){
+    
+    $("#rock" + num).attr("enabled", true);
+    $("#paper" + num).attr("enabled", true);
+    $("#scissors" + num).attr("enabled", true);
+    $("#random" + num).attr("enabled", true);
 }
