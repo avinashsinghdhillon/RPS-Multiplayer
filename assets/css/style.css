@@ -1,0 +1,29 @@
+body {
+    background-image: url("https://thenypost.files.wordpress.com/2014/06/rock-paper.jpg?quality=90&strip=all&w=1286");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.play-btn {
+    width: 80px;
+}
+
+.row {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    justify-content: center;
+}
+
+a:not([href]):not([tabindex]) {
+    color: white;
+}
+
+#results {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
+    background-color: rgba(66, 91, 138, 0.699);
+}

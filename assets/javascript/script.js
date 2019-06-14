@@ -101,15 +101,16 @@ $("#enter-name").on("submit", function(event){
         updatePlayerSection("p1", $("#inputPlayerName").val());
         p1Loaded = true;
         enableButtons("1");
+        $("#p1-name").text(player.name);
     }else if (p1Loaded && !p2Loaded){
         player.name = $("#inputPlayerName").val();
         player.playerNum = "2";
         updatePlayerSection("p2", $("#inputPlayerName").val());
         p2Loaded = true;
         enableButtons("2");
+        $("#p2-name").text(player.name);
     }
-    //??????????????????????????????????????????????????????????????????????
-    //else if both players are loaded display message to wait for next game???????????????
+    $("#inputPlayerName").val("");
 });
 
 function updatePlayerSection(playerNum, playerName){
@@ -131,25 +132,19 @@ function startNewGame(){
     gameID = ""; //clear any previous gameId's as a new ID will be assigned here
     result = "";
     debugger;
+    $("#p1-name").text(playerLoadData.p1);
+    $("#p2-name").text(playerLoadData.p2);
 
-
-    // //enable the game buttons panel based on player number
-    // if(player.playerNum === "1"){
-    //     enableButtons("1");
-    // }else{
-    //     enableButtons("2");
-    // }
-
-
-
-    //create a new game and push to DB??????????????????????????????????
+    //create a new game and push to DB
     if(player.playerNum === "2"){
         gameID = dataRef.ref("Game").push({
             p1Name: playerLoadData.p1,
             p2Name: playerLoadData.p2
         }).key;
     }
-    //start the timer////////////////////////////
+    ///////////////////////////////////////////
+    //start the timer////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////
     // if player does not make a play selection in 15 seconds, remove player from game
     timeoutKey = setTimeout(clearPlayer, 15000);
 }
@@ -198,9 +193,13 @@ function processResult(){
             console.log(snapshot.val().p2Move);
             result = calculateWinner(snapshot.val().p1Move, snapshot.val().p2Move);
             resultFound = true;
+
+            $("#results").text(snapshot.val().p1Name + ": " + snapshot.val().p1Move + ", "+
+                               snapshot.val().p2Name + ": " + snapshot.val().p2Move + ", " +
+                               "Winner: " + result);
         }
     })
-    //if a result has been found, log it to the DB
+    //if a result has been found, log it to the DB and the screen
     if(resultFound){
         dataRef.ref("Game/" + gameID).update({
             result: result
@@ -213,6 +212,9 @@ function processResult(){
     }else if(result === "0"){
         player.ties++;
     }
+
+    /////////////////////////////////////////////////////////////////////////////
+    //reset the game and set up the next one/////////////////////////////////////
 }
 
 function calculateWinner(move1, move2){
