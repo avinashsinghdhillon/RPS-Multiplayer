@@ -42,53 +42,70 @@ let player = {
 //this is the program flow
 /////////////////////
 
-// On form load check if player 1 or 2 is already loaded
-getDataSnapshot();
+
+//getDataSnapshot();
 
 //these are the function definitions
 
-
+// On form load check if player 1 or 2 is already loaded
 //this is the listner for the Players section
 //it checks if both players are loaded and starts a new game
-function getDataSnapshot(){
-    dataRef.ref("Players").on("value",function (snapshot){
-        //debugger;
-        console.log(snapshot.val());
-        playerLoadData = snapshot.val();
-        checkIfPlayersLoaded();
-        if(p1Loaded && p2Loaded && player.playerNum != 0){
-            startNewGame();
-        }
-    }, function(errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-      });
-};
 
 //this is the listener for the Game section
 dataRef.ref("Game").on("child_added", function(snapshot){
+    debugger;
+    console.log(snapshot.val());
+    playerLoadData = snapshot.val();
+    checkIfPlayersLoaded();
+    
 
-    //if a new record is added and this player does not have a gameID assigned
-    //and if the player is part of the game (playerNum != 0) then assign same gameid to this player
-    //debugger;
-    if(player.playerNum != "0" && gameID == ""){
-        gameID = snapshot.key;
+    if(p1Loaded && p2Loaded && player.playerNum != 0){
+        startNewGame();
     }
 
-});
+}, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
 
 
 function checkIfPlayersLoaded() {
-    if(playerLoadData.p1 != ""){
+    debugger;
+    dataRef.ref("Game").limitToLast(1).on("value", function(snapshot){
+        console.log(snapshot.val());
+    });
+
+
+
+
+    if(playerLoadData.p1name != ""){
         p1Loaded = true;
     }
-    if (playerLoadData.p2 != ""){
+    if (playerLoadData.p2name != ""){
         p2Loaded = true;
     }
 }
 
 
+
+
+
 $("#enter-name").on("submit", function(event){
     debugger;
+
+    checkIfPlayersLoaded()
+
+    //checkLastGameNode();
+
+
+    //if this player does not have a gameID assigned and if the player is part of the game (playerNum != 0) 
+    //then see if a "New Game" exists else start a new one
+    //debugger;
+    if(player.playerNum != "0" && gameID == ""){
+        gameID = snapshot.key;
+    }
+
+
+
     if(player.playerNum != "0"){
         //display message : you are already on the game/////////////////////////////////////
         return;
